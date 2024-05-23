@@ -25,5 +25,5 @@ FetchContent_MakeAvailable(raylib-cpp)
 include_directories(${raylib-cpp_SOURCE_DIR}/include)
 
 include(CMake/internal_utils.cmake)
-
+include_directories(${CMAKE_SOURCE_DIR}/include)
 add_subdirectory(walker)

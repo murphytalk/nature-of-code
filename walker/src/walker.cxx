@@ -1,41 +1,23 @@
 #include <raylib-cpp.hpp>
+#include <myraylib.hxx>
 
-int main()
-{
-    // Initialization
-    //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 450;
-
-    raylib::Window window(screenWidth, screenHeight, "raylib [shapes] example - raylib logo using shapes");
+DrawFunc draw = [](auto& window, int screenWidth, int screenHeight) {
     raylib::Color foreground(0, 68, 130);
     raylib::Color background = RAYWHITE;
 
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
-    //--------------------------------------------------------------------------------------
+    window.ClearBackground(background);
 
-    // Main game loop
-    while (!window.ShouldClose()) {    // Detect window close button or ESC key
-        // Update
-        //----------------------------------------------------------------------------------
-        // Update your variables here
-        //----------------------------------------------------------------------------------
+    foreground.DrawRectangle(screenWidth / 2 - 128, screenHeight / 2 - 128, 256, 256);
+    background.DrawRectangle(screenWidth / 2 - 112, screenHeight / 2 - 112, 224, 224);
+    foreground.DrawText("raylib", screenWidth / 2 - 44, screenHeight / 2 + 24, 50);
+    foreground.DrawText("cpp", screenWidth / 2 - 74, screenHeight / 2 + 54, 50);
 
-        // Draw
-        //----------------------------------------------------------------------------------
-        BeginDrawing();
-        {
-            window.ClearBackground(background);
+    DrawText("this is NOT a texture!", 350, 370, 10, GRAY);
+};
 
-            foreground.DrawRectangle(screenWidth / 2 - 128, screenHeight / 2 - 128, 256, 256);
-            background.DrawRectangle(screenWidth / 2 - 112, screenHeight / 2 - 112, 224, 224);
-            foreground.DrawText("raylib", screenWidth / 2 - 44, screenHeight / 2 + 24, 50);
-            foreground.DrawText("cpp", screenWidth / 2 - 74, screenHeight / 2 + 54, 50);
-
-            DrawText("this is NOT a texture!", 350, 370, 10, GRAY);
-        }
-        EndDrawing();
-        //----------------------------------------------------------------------------------
-    }
+int main()
+{
+    myraylib_t app(800, 450, "raylib [shapes] example - raylib logo using shapes", 60,draw);
     return 0;
 }
+
