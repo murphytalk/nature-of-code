@@ -3,28 +3,31 @@
 #include <Color.hpp>
 #include <Window.hpp>
 #include <functional>
+#include <memory>
 
-using DrawFunc = std::function<void(raylib::Window&, int, int)>;
-class myraylib_t {
-public:
-    myraylib_t(int width, int height, const char* title, const int fps, DrawFunc& draw_func) {
+template <class App, typename... Args>
+void myraylib(int width, int height, const char* title, const int fps,
+	// App constructor parameters
+	Args &&... args
+) {
+	raylib::Window window(width, height, title);
 
-        raylib::Window window(width, height, title);
+	auto app = std::make_unique<App>(std::forward<Args>(args)...);
 
-        SetTargetFPS(fps);
+	SetTargetFPS(fps);
+	while (!window.ShouldClose()) {    // Detect window close button or ESC key
+		// Update
+		//----------------------------------------------------------------------------------
+		// Update your variables here
+		//----------------------------------------------------------------------------------
+		app->update(window, width, height);
 
-        while (!window.ShouldClose()) {    // Detect window close button or ESC key
-            // Update
-            //----------------------------------------------------------------------------------
-            // Update your variables here
-            //----------------------------------------------------------------------------------
+		// Draw
+		//----------------------------------------------------------------------------------
+		BeginDrawing();
+			app->draw(window, width, height);
+		EndDrawing();
+		//----------------------------------------------------------------------------------
+	}
+}
 
-            // Draw
-            //----------------------------------------------------------------------------------
-            BeginDrawing();
-            draw_func(window, width, height);
-            EndDrawing();
-            //----------------------------------------------------------------------------------
-        }
-    }
-};
