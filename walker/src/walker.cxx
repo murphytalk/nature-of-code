@@ -1,37 +1,41 @@
-#include <SFML/Graphics.hpp>
+#include <raylib-cpp.hpp>
 
 int main()
 {
-    // Create the main window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+    // Initialization
+    //--------------------------------------------------------------------------------------
+    const int screenWidth = 800;
+    const int screenHeight = 450;
 
-    // Create a graphical text to display
-    sf::Font font;
-    if (!font.loadFromFile("0xProtoNerdFontMono-Regular.ttf"))
-        return EXIT_FAILURE;
-    sf::Text text("Hello SFML", font, 50);
+    raylib::Window window(screenWidth, screenHeight, "raylib [shapes] example - raylib logo using shapes");
+    raylib::Color foreground(0, 68, 130);
+    raylib::Color background = RAYWHITE;
 
-    // Start the game loop
-    while (window.isOpen())
-    {
-        // Process events
-        sf::Event event;
-        while (window.pollEvent(event))
+    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    //--------------------------------------------------------------------------------------
+
+    // Main game loop
+    while (!window.ShouldClose()) {    // Detect window close button or ESC key
+        // Update
+        //----------------------------------------------------------------------------------
+        // Update your variables here
+        //----------------------------------------------------------------------------------
+
+        // Draw
+        //----------------------------------------------------------------------------------
+        BeginDrawing();
         {
-            // Close window: exit
-            if (event.type == sf::Event::Closed)
-                window.close();
+            window.ClearBackground(background);
+
+            foreground.DrawRectangle(screenWidth / 2 - 128, screenHeight / 2 - 128, 256, 256);
+            background.DrawRectangle(screenWidth / 2 - 112, screenHeight / 2 - 112, 224, 224);
+            foreground.DrawText("raylib", screenWidth / 2 - 44, screenHeight / 2 + 24, 50);
+            foreground.DrawText("cpp", screenWidth / 2 - 74, screenHeight / 2 + 54, 50);
+
+            DrawText("this is NOT a texture!", 350, 370, 10, GRAY);
         }
-
-        // Clear screen
-        window.clear();
-
-        // Draw the string
-        window.draw(text);
-
-        // Update the window
-        window.display();
+        EndDrawing();
+        //----------------------------------------------------------------------------------
     }
-
-    return EXIT_SUCCESS;
+    return 0;
 }

@@ -8,14 +8,21 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest /Zc:__cplusplus")
     add_compile_definitions(NOMINMAX)
 else(MSVC)
-    set (CMAKE_CXX_STANDARD 17)
+    set (CMAKE_CXX_STANDARD 20)
 endif(MSVC)
 
 include(FetchContent)
-FetchContent_Declare(SFML
-    GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG 2.6.x)
-FetchContent_MakeAvailable(SFML)
+
+FetchContent_Declare(raylib
+    URL https://github.com/raysan5/raylib/archive/refs/tags/5.0.tar.gz
+)
+FetchContent_MakeAvailable(raylib)
+
+FetchContent_Declare(raylib-cpp
+    URL https://github.com/RobLoach/raylib-cpp/archive/refs/tags/v5.0.0.tar.gz
+)
+FetchContent_MakeAvailable(raylib-cpp)
+include_directories(${raylib-cpp_SOURCE_DIR}/include)
 
 include(CMake/internal_utils.cmake)
 
