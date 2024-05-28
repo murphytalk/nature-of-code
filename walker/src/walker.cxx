@@ -23,7 +23,7 @@ public:
 
 int main()
 {
-    myraylib<app>(800, 450, "raylib [shapes] example - raylib logo using shapes", 60);
+    myraylib<app>(800, 450, "raylib [shapes] example - raylib logo using shapes", 60, 0);
     return 0;
 }
 
