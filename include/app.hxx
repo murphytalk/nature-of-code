@@ -33,17 +33,17 @@ void myraylib(int width, int height, const char *title, const int fps,
     auto app = std::make_unique<App>(std::forward<Args>(args)...);
 
     SetTargetFPS(fps);
-    while (!window.ShouldClose()) { // Detect window close button or ESC key
-                                    // Update
-                                    //----------------------------------------------------------------------------------
-                                    // Update your variables here
-                                    //----------------------------------------------------------------------------------
+    while (!window.ShouldClose()) {
+        // Update
+        //----------------------------------------------------------------------------------
+        // Update your variables here
+        //----------------------------------------------------------------------------------
         app->update(window, width, height);
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
-        app->draw(window, width, height);
+            app->draw(window, width, height);
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
