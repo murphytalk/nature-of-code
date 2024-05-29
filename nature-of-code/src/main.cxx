@@ -1,10 +1,10 @@
 #include <raylib-cpp.hpp>
-#include <myraylib.hxx>
+#include <app.hxx>
 
-class app {
+class walker {
 public:
-    app() {}
-    ~app() {}
+    walker() {}
+    ~walker() {}
     void update(raylib::Window& window, int screenWidth, int screenHeight) {}
     void draw(raylib::Window& window, int screenWidth, int screenHeight) {
         raylib::Color foreground(0, 68, 130);
@@ -21,9 +21,18 @@ public:
     }
 };
 
-int main()
+FuncMap apps = {
+    {"walker", AppDef {0, "", 
+        [](const std::vector<std::string>& args){
+            myraylib<walker>(800, 450, "raylib [shapes] example - raylib logo using shapes", 60, 0);
+        }},
+    },
+};
+
+int main(int argc, char** argv)
 {
-    myraylib<app>(800, 450, "raylib [shapes] example - raylib logo using shapes", 60, 0);
+    const auto& args = parse_cmd_line_args("Nature of code", argc, argv,apps);
+    callFunctionByName(apps, args.first, args.second);
     return 0;
 }
 
