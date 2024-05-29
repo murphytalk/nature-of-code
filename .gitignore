@@ -4,4 +4,7 @@ bin/
 out/
 *.swp
 *~
-
+b/
+build/
+compile_commands.json
+.cache/
