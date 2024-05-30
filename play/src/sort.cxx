@@ -43,7 +43,7 @@ sort::sort(int w, int h, int b){
      */
     const int n = (w + space_between_bar)/(b + space_between_bar);
     bar_width = (w - (n-1)*space_between_bar) / n;
-    bar_height_unit = h / n;
+    bar_height_unit = (float)h / n;
 
     items1.reserve(n);
     items2.reserve(n);

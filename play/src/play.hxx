@@ -8,7 +8,7 @@ class sort {
     std::vector<int> items1;
     std::vector<int> items2;
     int bar_width;
-    int bar_height_unit;
+    float bar_height_unit;
     void draw_sorting_bars(const raylib::Color& clr, int screenWidth, int screenHeight, const std::vector<int>& items);
 public:
     sort(int w, int h, int b);
