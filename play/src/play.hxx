@@ -19,6 +19,7 @@ class sort {
     void draw_one_sorting_bar(const raylib::Color& clr, raylib::Rectangle& rc, const std::vector<int>& items, int i);
 public:
     sort(int w, int h, int b);
+    ~sort();
     void update(raylib::Window &window, int screenWidth, int screenHeight);
     void draw(raylib::Window &window, int screenWidth, int screenHeight);
 };

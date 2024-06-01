@@ -63,8 +63,13 @@ sort::sort(int w, int h, int b): running(-1){
     }
 }
 
+sort::~sort(){
+    if(sorting1.joinable()) sorting1.join();
+    if(sorting2.joinable()) sorting2.join();
+}
+
+
 void sort::start(){
-    TraceLog(LOG_INFO,"start to sort");
     if(sorting1.joinable()) return;
 
     auto cmp = [](int a, int b){
@@ -73,19 +78,24 @@ void sort::start(){
     };
     sorting1 = std::thread([this,&cmp](){
         running++;
+        TraceLog(LOG_INFO,"running sorting: %d", (int)running);
         std::sort(items1.begin(), items1.end(),cmp);
         running--;
+        TraceLog(LOG_INFO,"running sorting: %d", (int)running);
     });
 
     sorting2 = std::thread([this,&cmp](){
         running++;
+        TraceLog(LOG_INFO,"running sorting: %d", (int)running);
         bubble_sort(items2.begin(), items2.end(),cmp);
         running--;
+        TraceLog(LOG_INFO,"running sorting: %d", (int)running);
     });
 }
 
 void sort::update(raylib::Window& window, int screenWidth, int screenHeight){
     if(running <= 0 && IsKeyPressed(KEY_SPACE)){
+        running = 0;
         start();
     }
 }
