@@ -1,5 +1,7 @@
 #include "Color.hpp"
+#include "Rectangle.hpp"
 #include "play.hxx"
+#include "raylib.h"
 #include <random>
 #include <algorithm>
 #include <iterator> // for std::iterator_traits
@@ -33,7 +35,7 @@ namespace {
     constexpr auto delay_before_sorting = 300ms;
     constexpr auto draw_delay = 1ms;
     constexpr int space_between_bar = 1; // space between bars
-
+    constexpr int frame_margin = 2;
 }
 
 sort::sort(int w, int h, int b){
@@ -41,9 +43,15 @@ sort::sort(int w, int h, int b){
      *  
      *  n * b + (n-1) * s = w
      */
+    // arrange 2 sorting areas vertically
+    w -= 2*frame_margin;
+    h = (h-3*frame_margin) / 2;
     const int n = (w + space_between_bar)/(b + space_between_bar);
     bar_width = (w - (n-1)*space_between_bar) / n;
     bar_height_unit = (float)h / n;
+
+    rc1 = raylib::Rectangle(frame_margin, frame_margin, w,h);
+    rc2 = raylib::Rectangle(frame_margin, frame_margin + h + frame_margin, w,h);
 
     items1.reserve(n);
     items2.reserve(n);
@@ -53,21 +61,27 @@ sort::sort(int w, int h, int b){
         items1.push_back(v);
         items2.push_back(v);
     }
+}
+
+void sort::start(){
+    TraceLog(LOG_INFO,"start to sort");
+    if(sorting1.joinable()) return;
 
     auto cmp = [](int a, int b){
         std::this_thread::sleep_for(draw_delay);
         return a < b;
     };
     sorting1 = std::thread([this,&cmp](){
-        std::this_thread::sleep_for(delay_before_sorting);
-        bubble_sort(items1.begin(), items1.end(),cmp);
+        status = status_t::running;
+        std::sort(items1.begin(), items1.end(),cmp);
+        status = status_t::done;
     });
-#if 0
-    std::thread s2([this,&cmp](){
-        std::this_thread::sleep_for(delay_before_sorting);
+
+    sorting2 = std::thread([this,&cmp](){
+        status = status_t::running;
         bubble_sort(items2.begin(), items2.end(),cmp);
+        status = status_t::done;
     });
-#endif
 }
 
 void sort::update(raylib::Window& window, int screenWidth, int screenHeight){}
@@ -80,5 +94,17 @@ void sort::draw_sorting_bars(const raylib::Color& clr, int screenWidth, int scre
 }
 void sort::draw(raylib::Window& window, int screenWidth, int screenHeight){
     ClearBackground(RAYWHITE);
-    draw_sorting_bars(BLACK, screenWidth, screenHeight, items1);
+    if(status == status_t::not_started){
+        raylib::Color foreground(0, 68, 130);
+        constexpr char txt[] = "Press space to run";
+        constexpr int font_size = 50;
+        const auto textWidth = MeasureText(txt, font_size);
+        float posX = (screenWidth - textWidth) / 2.0f;
+        float posY = (screenHeight - font_size) / 2.0f;
+        foreground.DrawText(txt, posX, posY, font_size);
+        if(IsKeyPressed(KEY_SPACE)) start();
+    }
+    else{
+        draw_sorting_bars(BLACK, screenWidth, screenHeight, items1);
+    }
 }
