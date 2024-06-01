@@ -16,10 +16,9 @@ class sort {
     float bar_height_unit;
     void start();
     void draw_sorting_bars(const raylib::Color& clr);
-    void draw_one_sorting_bar(const raylib::Color& clr, raylib::Rectangle& rc, const std::vector<int>& items, int i);
+    void draw_one_sorting_bar(const raylib::Color& clr, const char* sort_name, raylib::Rectangle& rc, const std::vector<int>& items, int i);
 public:
     sort(int w, int h, int b);
-    ~sort();
     void update(raylib::Window &window, int screenWidth, int screenHeight);
     void draw(raylib::Window &window, int screenWidth, int screenHeight);
 };

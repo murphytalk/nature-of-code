@@ -45,7 +45,7 @@ sort::sort(int w, int h, int b): running(-1){
      */
     // arrange 2 sorting areas vertically
     w -= 2*frame_margin;
-    h = (h-3*frame_margin) / 2;
+    h = (h-frame_margin) / 2;
     const int n = (w + space_between_bar)/(b + space_between_bar);
     bar_width = (w - (n-1)*space_between_bar) / n;
     bar_height_unit = (float)h / n;
@@ -62,12 +62,6 @@ sort::sort(int w, int h, int b): running(-1){
         items2.push_back(v);
     }
 }
-
-sort::~sort(){
-    if(sorting1.joinable()) sorting1.join();
-    if(sorting2.joinable()) sorting2.join();
-}
-
 
 void sort::start(){
     if(sorting1.joinable()) return;
@@ -102,12 +96,13 @@ void sort::update(raylib::Window& window, int screenWidth, int screenHeight){
 
 void sort::draw_sorting_bars(const raylib::Color& clr){
     for(int i = 0 ; i < items1.size() ; ++i){
-        draw_one_sorting_bar(clr, rc1,  items1, i);
-        draw_one_sorting_bar(clr, rc2,  items2, i);
+        draw_one_sorting_bar(clr, "std::sort", rc1, items1, i);
+        draw_one_sorting_bar(clr, "bubble sort", rc2,  items2, i);
     }
 }
 
-void sort::draw_one_sorting_bar(const raylib::Color& clr, raylib::Rectangle& rc,const std::vector<int>& items, int i){
+void sort::draw_one_sorting_bar(const raylib::Color& clr, const char* sort_name, raylib::Rectangle& rc,const std::vector<int>& items, int i){
+    clr.DrawText(sort_name,frame_margin , rc.y + frame_margin, 10);
     int barHeight = items[i] * bar_height_unit;
     clr.DrawRectangle(i * (bar_width + 1), rc.y + rc.height - barHeight, bar_width, barHeight);
 }
