@@ -53,6 +53,25 @@ sort::sort(int w, int h, int b): running(-1){
     rc1 = raylib::Rectangle(frame_margin, frame_margin, w,h);
     rc2 = raylib::Rectangle(frame_margin, frame_margin + h + frame_margin, w,h);
 
+    init(n);
+}
+
+sort::~sort(){
+    clear();
+}
+
+void sort::clear(){
+    if(sorting1.joinable()) sorting1.join();
+    if(sorting2.joinable()) sorting2.join();
+}
+
+void sort::init(int n){
+    if(n == 0){
+        // run again
+        n = items1.size();
+        items1.clear();
+        items2.clear();
+    }
     items1.reserve(n);
     items2.reserve(n);
 
@@ -64,7 +83,8 @@ sort::sort(int w, int h, int b): running(-1){
 }
 
 void sort::start(){
-    if(sorting1.joinable()) return;
+    if(running > 0) return;
+    clear();
 
     auto cmp = [](int a, int b){
         std::this_thread::sleep_for(draw_delay);
@@ -90,6 +110,7 @@ void sort::start(){
 void sort::update(raylib::Window& window, int screenWidth, int screenHeight){
     if(running <= 0 && IsKeyPressed(KEY_SPACE)){
         running = 0;
+        init(0);
         start();
     }
 }
