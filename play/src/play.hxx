@@ -5,8 +5,7 @@
 #include <atomic>
 
 class sort {
-    enum status_t { not_started, running, done };
-    status_t status { status_t::not_started };
+    std::atomic<int> running;
     std::thread sorting1;
     std::thread sorting2;
     std::vector<int> items1;
@@ -16,7 +15,8 @@ class sort {
     int bar_width;
     float bar_height_unit;
     void start();
-    void draw_sorting_bars(const raylib::Color& clr, int screenWidth, int screenHeight, const std::vector<int>& items);
+    void draw_sorting_bars(const raylib::Color& clr);
+    void draw_one_sorting_bar(const raylib::Color& clr, raylib::Rectangle& rc, const std::vector<int>& items, int i);
 public:
     sort(int w, int h, int b);
     void update(raylib::Window &window, int screenWidth, int screenHeight);
